@@ -1,5 +1,11 @@
 package com.bettercloud.challenges._2017._01Jan;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 /**
  * Created by davidesposito on 1/20/17.
  */
@@ -35,7 +41,21 @@ public class _012717_FizzBuzz {
 
         @Override
         public String process(int min, int max) {
-            return "";
+            return IntStream.rangeClosed(min, max)
+                    .filter(i -> i > 0)
+                    .boxed()
+                    .map(i -> new Pair<>(i, ""))
+                    .map(p -> { if (p.getA() % 3 == 0) p.setB("Fizz"); return p; })
+                    .map(p -> { if (p.getA() % 5 == 0) p.setB(p.getB() +"Buzz"); return p; })
+                    .map(p -> p.getB().isEmpty() ? p.getA() + "" : p.getB())
+                    .collect(Collectors.joining("\n"));
         }
+    }
+
+    @Data
+    @AllArgsConstructor
+    private static class Pair<A, B> {
+        private A a;
+        private B b;
     }
 }
