@@ -98,6 +98,8 @@ public class _020317_ShapePrinter {
             return IntStream.range(0, size).boxed()
                     .map(val -> val + 1)
                     .map(val -> line(size - val + 1, " ") + line(val, c) + " " + line(val - 1, c))
+                    .map(str -> str.replaceFirst("\\s++$", ""))
+                    .map(str -> str.substring(1))
                     .collect(Collectors.joining("\n"));
         }
 
