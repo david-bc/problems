@@ -8,7 +8,10 @@ import java.util.function.BiFunction;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public final class Zipper {
+/**
+ * Copied from http://stackoverflow.com/questions/17640754/zipping-streams-using-jdk8-with-lambda-java-util-stream-streams-zip
+ */
+public final class StreamUtil {
     public static<A, B, C> Stream<C> zip(Stream<? extends A> a,
                                          Stream<? extends B> b,
                                          BiFunction<? super A, ? super B, ? extends C> zipper) {

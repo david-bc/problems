@@ -1,6 +1,6 @@
 package com.bettercloud.challenges._2017._01Jan;
 
-import com.bettercloud.challenges._2017.util.Zipper;
+import com.bettercloud.challenges._2017.util.StreamUtil;
 import org.javatuples.Pair;
 
 import java.util.stream.Collectors;
@@ -38,7 +38,7 @@ public class _012017_Reverserator {
                     .map(Character::getNumericValue)
                     .boxed();
 
-            String result = Zipper.zip(keyStream, numStream, Pair::new)
+            String result = StreamUtil.zip(keyStream, numStream, Pair::new)
                     .sorted((pair1, pair2) -> pair2.getValue0() - pair1.getValue0())
                     .map(Pair::getValue1)
                     .map(Object::toString)
