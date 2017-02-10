@@ -1,5 +1,8 @@
 package com.bettercloud.challenges._2017._01Jan;
 
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
 /**
  * Created by davidesposito on 1/20/17.
  */
@@ -39,7 +42,14 @@ public class _012717_FizzBuzz {
 
         @Override
         public String process(int min, int max) {
-            return "";
+            return IntStream.rangeClosed(min, max)
+                    .filter(x -> x > 0)
+                    .mapToObj(num -> num % 3 ==0 && num % 5 == 0 ? "FizzBuzz"
+                            : num % 3 == 0 ? "Fizz"
+                            : num % 5 == 0 ? "Buzz"
+                            : Integer.toString(num))
+            .collect(Collectors.joining("\n"));
+
         }
     }
 }
