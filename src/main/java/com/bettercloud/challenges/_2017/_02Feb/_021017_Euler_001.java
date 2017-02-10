@@ -41,7 +41,12 @@ public class _021017_Euler_001 {
 
         @Override
         public int getSum(List<Integer> multiples, int max) {
-            return 0;
+            return IntStream.range(0, max)
+                    .filter(num -> multiples.stream()
+                            .map(multiple -> num % multiple)
+                            .anyMatch(remainder -> remainder == 0)
+                    )
+                    .sum();
         }
     }
 }
