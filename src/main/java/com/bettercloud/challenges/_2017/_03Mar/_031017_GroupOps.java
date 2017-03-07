@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Created by davidesposito on 3/7/17.
@@ -47,17 +48,31 @@ public class _031017_GroupOps {
 
         @Override
         public List<String> getTags(Collection<Article> articles) {
-            return null;
+            return getTagCounts(articles).keySet().stream()
+                    .collect(Collectors.toList());
         }
 
         @Override
         public Map<String, Integer> getTagCounts(Collection<Article> articles) {
-            return null;
+            return articles.stream()
+                    .flatMap(a -> a.getTags().stream())
+                    .map(Tag::getName)
+                    .collect(Collectors.groupingBy(a -> a))
+                    .entrySet().stream()
+                    .collect(Collectors.toMap(
+                            e -> e.getKey(),
+                            e -> e.getValue().size()
+                    ));
         }
 
         @Override
         public List<String> getMostPopularTags(Collection<Article> articles, int limit) {
-            return null;
+            return getTagCounts(articles)
+                    .entrySet().stream()
+                    .sorted((e1, e2) -> e2.getValue().compareTo(e1.getValue()))
+                    .limit(limit)
+                    .map(Map.Entry::getKey)
+                    .collect(Collectors.toList());
         }
     }
 
