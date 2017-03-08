@@ -1,5 +1,7 @@
 package com.bettercloud.challenges._2017._03Mar;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
@@ -10,6 +12,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * Created by davidesposito on 3/8/17.
@@ -91,29 +94,47 @@ public class _030817_Database {
 
     public static class MyDatabase<I, T> implements Database<I, T> {
 
+        private final Map<I, T> backbone = Maps.newHashMap();
+
         @Override
         public Optional<T> findOne(I id) {
-            return null;
+            return Optional.ofNullable(backbone.get(id));
         }
 
         @Override
         public List<T> findAll(SelectQuery<T> select) {
-            return null;
+            return Lists.newArrayList(backbone.values()).stream()
+                    .filter(opt(select.getWhere(), val -> true))
+                    .sorted(opt(select.getSort(), (a, b) -> -1))
+                    .skip(opt(select.getOffset(), 0))
+                    .limit(opt(select.getLimit(), Integer.MAX_VALUE))
+                    .collect(Collectors.toList());
         }
 
         @Override
         public <K> Map<K, List<T>> findAll(GroupByQuery<K, T> select) {
-            return null;
+            return Lists.newArrayList(backbone.values()).stream()
+                    .filter(opt(select.getWhere(), val -> true))
+                    .skip(opt(select.getOffset(), 0))
+                    .limit(opt(select.getLimit(), Integer.MAX_VALUE))
+                    .collect(Collectors.groupingBy(select.getGrouping()));
+        }
+
+        private <V> V opt(V val, V defaultVal) {
+            return Optional.ofNullable(val).orElse(defaultVal);
         }
 
         @Override
         public long count(Predicate<T> where) {
-            return 0;
+            return backbone.values().stream()
+                    .filter(Optional.ofNullable(where).orElse((val) -> true))
+                    .count();
         }
 
         @Override
         public T save(I id, T item) {
-            return null;
+            backbone.put(id, item);
+            return item;
         }
     }
 
